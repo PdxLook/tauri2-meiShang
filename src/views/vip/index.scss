@@ -1,0 +1,121 @@
+.open-vip {
+  min-height: 100vh;
+  background-image: url(@/assets/images/open-vip-bg.webp);
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-position: top;
+
+  --el-border-color-lighter: transparent;
+  --el-collapse-border-color: #F5F6F7;
+  --el-collapse-header-height: initial;
+}
+
+
+
+.icon-vip-res {
+  width: 132px;
+  height: 46px;
+  background-image: url(@/assets/images/vip-rec.svg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.vip-version {
+  &-item {
+    --bg: linear-gradient(140deg, #fff3f3 0%, #fcd4d4 100%);
+    --color-900: #CC0011;
+    --color-800: #EB0013;
+    --btn: #EB0013;
+    --btn-color: #fff;
+
+    &-gradient {
+
+      background: var(--bg);
+    }
+
+    &-color-900 {
+      color: var(--color-900);
+    }
+
+    &-color-800 {
+      color: var(--color-800);
+    }
+
+    &-bg-btn {
+      background: var(--btn);
+    }
+
+    &-btn-color {
+      color: var(--btn-color);
+    }
+
+    &:nth-child(1) {
+      --bg: linear-gradient(140deg, #fff3f3 0%, #fcd4d4 100%);
+      --color-900: #CC0011;
+      --color-800: #EB0013;
+      --btn: #EB0013;
+    }
+
+    &:nth-child(2) {
+      --bg: linear-gradient(139deg, #ffefdb 0%, #ffd7a6 100%);
+      --color-900: #936125;
+      --color-800: #936125;
+      --btn: #333333;
+    }
+
+    &:nth-child(3) {
+      --bg: linear-gradient(151deg, #373d68 0%, #1f1f38 100%);
+      --color-900: #FEE2BF;
+      --color-800: #FEE2BF;
+      --btn: linear-gradient(99deg, #ffefdb 26%, #ffd7a6 100%);
+      --btn-color: #333333;
+    }
+  }
+}
+
+:deep(.el-collapse) {
+  margin: -24px 0;
+
+  .el-collapse-item {
+    padding: 24px 0;
+
+    &+.el-collapse-item {
+      border-top: 1px solid #f5f6f7;
+    }
+
+    .el-collapse-item__header {
+      height: initial;
+    }
+
+    .el-collapse-item__content {
+      padding-bottom: 0;
+    }
+  }
+}
+
+.price-package {
+  &-items {
+    background: #ffffff;
+    border: 1px solid #e6e6e6;
+    border-radius: 4px;
+    padding: 16px;
+    position: relative;
+
+    .rec {
+      width: 36px;
+      height: 20px;
+      background: #eb0013;
+      border-radius: 6px 0px 6px 0px;
+      position: absolute;
+      right: -1px;
+      top: -10px;
+    }
+
+    &.active {
+      border: 1px solid #f24b59;
+      box-shadow: 0px 0px 20px 0px rgba(166, 166, 166, 0.20);
+      background: #fff3f4;
+    }
+  }
+}

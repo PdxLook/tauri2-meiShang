@@ -19,6 +19,13 @@ export default defineConfig(async () => ({
   //     },
   //   },
   // },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        silenceDeprecations: ["legacy-js-api"],
+      },
+    },
+  },
   plugins: [
     vue(),
     UnoCSS(),

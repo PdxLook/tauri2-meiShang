@@ -1,6 +1,6 @@
 <template>
   <div class="drawer-right-main" v-if="drawer">
-    <el-drawer v-model="drawer" title="词库名称" :direction="direction" size="80%" :before-close="handleClose">
+    <el-drawer v-model="drawer" title="词库名称" size="80%">
       <div class="key-lists bg-black-200 h-full">
         <div class="table-card bg-white rounded space-y-5 p-5 h-full relative overflow-hidden">
           <div class="table-card-header space-y-5">
@@ -56,7 +56,7 @@ import KeyEdit from './KeyEdit.vue'
 const drawer = ref(false)
 const KeyAddRef = ref(null)
 const KeyEditRef = ref(null)
-
+const keyword = ref('')
 const openAdd = (row = null) => {
   KeyAddRef.value.openAdd(row)
 }

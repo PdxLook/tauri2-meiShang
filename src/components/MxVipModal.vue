@@ -1,7 +1,7 @@
 <template>
   <div class="mx-vip-modal">
     <el-dialog v-model="dialogVipModal" width="640" :before-close="vipModalClose" :close-on-click-modal="false"
-      draggable :show-close="showClose">
+      align-center :show-close="showClose">
       <div class="">
         <div class="vip-bg p-6">
           <p class="font-600 text-4.5 text-black-900 leading-7">{{ selectItems?.user_info?.mobile }}</p>

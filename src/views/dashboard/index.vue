@@ -305,10 +305,16 @@ async function getBalance() {
 }
 
 async function getData() {
-
+  const loading = ElLoading.service({
+    lock: true,
+    text: 'Loading',
+    background: 'rgba(0, 0, 0, 0.7)',
+  })
   const getRes = await pullIndex()
   if (!getRes?.status) return
   indexData.value = getRes?.data
+
+  loading.close()
 }
 
 watch(() => userStore.isLoggedIn, (newIsLoggedIn) => {
