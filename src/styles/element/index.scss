@@ -1,0 +1,35 @@
+@forward 'element-plus/theme-chalk/src/common/var.scss' with ($colors: ('primary': ('base': #5a8dee,
+    ),
+    'success': ('base': #009faa,
+    ),
+    'danger': ('base': #ff5b5c,
+    ),
+    'warning': ('base': #ffb800,
+    ),
+  ),
+);
+
+@use "element-plus/theme-chalk/src/index.scss" as *;
+
+
+.el-button {
+  --el-border-radius-base: 2px !important;
+}
+
+.el-button--small {
+  --el-border-radius-base: 3px !important;
+  ;
+  --el-button-size: 30px !important;
+  ;
+  height: var(--el-button-size);
+}
+
+.el-breadcrumb {
+  --el-text-color-primary: #5a8dee !important;
+  font-size: 14px;
+
+  .is-link {
+    font-weight: normal !important;
+    ;
+  }
+}

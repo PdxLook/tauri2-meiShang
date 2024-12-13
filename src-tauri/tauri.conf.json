@@ -1,0 +1,43 @@
+{
+  "productName": "meiShang",
+  "version": "0.0.1",
+  "identifier": "com.mjx.app",
+  "build": {
+    "beforeDevCommand": "pnpm dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "pnpm build",
+    "frontendDist": "../dist"
+  },
+
+  "app": {
+    "windows": [
+      {
+        "label": "login",
+        "title": "登录",
+        "width": 946,
+        "height": 563,
+        "minWidth": 946,
+        "minHeight": 563,
+        "url": "/login",
+        "resizable": false,
+        "center": true,
+        "decorations": false
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ]
+  },
+  "plugins": {}
+}

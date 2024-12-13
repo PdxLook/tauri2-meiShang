@@ -1,0 +1,98 @@
+@import "@lib/font/iconfont.css";
+
+
+
+body {
+  font-family: Microsoft YaHei UI-400;
+}
+
+.font-sans-500 {
+  font-family: Microsoft YaHei UI-500;
+}
+
+.font-sans-600 {
+  font-family: Microsoft YaHei UI-600;
+}
+
+/* 滚动条的整体样式 */
+::-webkit-scrollbar {
+  width: 12px;
+  /* 设置垂直滚动条宽度 */
+  height: 12px;
+  /* 设置水平滚动条高度 */
+}
+
+/* 滚动条轨道 */
+::-webkit-scrollbar-track {
+  background: #f4f4f4;
+  /* 滚动条轨道背景颜色 */
+  border-radius: 6px;
+  /* 圆角 */
+}
+
+/* 滚动条滑块 */
+::-webkit-scrollbar-thumb {
+  background: #A6A6A6;
+  /* 滑块颜色 */
+  border-radius: 6px;
+  /* 滑块圆角 */
+  border: 3px solid #f4f4f4;
+  /* 增加边距 */
+}
+
+/* 鼠标悬停时的滑块样式 */
+::-webkit-scrollbar-thumb:hover {
+  background: #737373;
+  /* 鼠标悬停时滑块的颜色 */
+}
+
+
+
+:root {
+  // --el-color-primary: #EB0013 !important;
+}
+
+.el-table {
+  .el-table__header-wrapper {
+    --el-table-header-bg-color: #f5f6f7;
+  }
+
+  thead th {
+    font-weight: 500;
+    // color: #333333;
+  }
+
+  // tbody {
+  //   font-size: 14px;
+  // }
+}
+
+.el-table thead th {
+  font-weight: 500 !important;
+  color: #333333;
+}
+
+
+a {
+  &:hover {
+    color: #EB0013;
+  }
+}
+
+
+.drawer-right-main {
+  .el-drawer__header {
+    margin-bottom: 0;
+    padding: 0 20px;
+    height: 48px;
+
+    .el-drawer__title {
+      font-size: 14px;
+    }
+  }
+
+  .el-drawer__body {
+    padding: 16px;
+    background-color: #F5F6F7;
+  }
+}
