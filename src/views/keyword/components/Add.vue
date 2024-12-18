@@ -1,7 +1,20 @@
 <template>
   <div class="keyword-add " v-if="dialogVisible">
-    <el-dialog v-model="dialogVisible" title="添加词库" :close-on-click-modal="false" align-center
-      :before-close="modalClose">
+    <el-dialog v-model="dialogVisible" :close-on-click-modal="false" align-center :before-close="modalClose"
+      :show-close="false" :fullscreen="fullscreen" draggable>
+      <template #header="{ close, titleId, titleClass }">
+        <div class="flex-items-center">
+          <h4 :id="titleId" :class="titleClass">{{ dialogTitle }}</h4>
+          <div class="ml-auto">
+            <el-button @click="fullscreen = !fullscreen" link>
+              <i class="iconfont " :class="fullscreen ? 'icon-suoxiaohua' : 'icon-zuidahua'"></i>
+            </el-button>
+            <el-button @click="close" link>
+              <i class="iconfont icon-cuowu-xian"></i>
+            </el-button>
+          </div>
+        </div>
+      </template>
       <div class="p-4 h-full">
         <el-form :model="queryForm" label-width="auto" :rules="rules" ref="ruleFormRef" class="space-y-8">
           <el-form-item label="分组管理" prop="group">
@@ -39,6 +52,8 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
+const fullscreen = ref(false)
+const dialogTitle = ref('添加词库')
 const dialogVisible = ref(false)
 const dialogDetailsRef = ref(null)
 
@@ -86,6 +101,7 @@ const openAdd = (row) => {
 
 const closeAdd = () => {
   dialogVisible.value = false
+  fullscreen.value = false
 }
 
 const modalClose = () => {

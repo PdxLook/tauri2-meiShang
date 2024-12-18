@@ -4,22 +4,21 @@
       align-center :show-close="showClose">
       <div class="">
         <div class="vip-bg p-6">
-          <p class="font-600 text-4.5 text-black-900 leading-7">{{ selectItems?.user_info?.mobile }}</p>
+          <p class="font-600 text-4.5 text-black-900 leading-7">{{ vipData?.user_info?.mobile }}</p>
           <p class="text-3 leading-4.5 text-black-800 mt-2">欢迎加入每商矩阵系统</p>
-          <!-- <p class="text-3 leading-4.5 text-black-800 mt-2">未开通/个人版 到期时间：{{ selectItems?.end_date }}</p> -->
+          <!-- <p class="text-3 leading-4.5 text-black-800 mt-2">未开通/个人版 到期时间：{{ vipData?.end_date }}</p> -->
         </div>
         <div class="p-6 pb-0">
           <div class="flex space-x-8">
             <div class="flex-none bg-black-200 rounded w-[200px] px-4 py-5">
               <div class="card">
-                <div class="text-center font-600 text-3.5 text-black-900 leading-5">
-                  <p>{{ selectItems?.vip_info?.name }}</p>
+                <div class="text-center font-sans-500 text-3.5 text-black-900 leading-5">
+                  <p>{{ vipData?.vip_info?.name }}</p>
                   <p>会员专属权益</p>
                 </div>
                 <div class="border-t border-black-400 my-5"></div>
-                <ul class="text-3 leading-4.5 text-black-800 rights-lists space-y-4">
-                  <li class="rights-lists-items" v-for="(rights, index) in selectItems?.vip_info?.benefits"
-                    :key="index">
+                <ul class="text-3 leading-4.5 text-black-800 rights-lists space-y-3">
+                  <li class="rights-lists-items" v-for="(rights, index) in vipData?.vip_info?.benefits" :key="index">
                     <span class="">{{ rights?.title }}</span>
                   </li>
                 </ul>
@@ -29,23 +28,29 @@
               <ul class="form space-y-9">
                 <li class="form-items">
                   <span class="form-items-label">会员类型：</span>
-                  <div class="form-items-input">{{ selectItems?.vip_info?.name }}</div>
+                  <div class="form-items-input">{{ vipData?.vip_info?.name }}</div>
                 </li>
                 <li class="form-items">
                   <span class="form-items-label">运营公众号：</span>
-                  <div class="form-items-input">{{ selectItems?.vip_info?.wechat_count }}个</div>
+                  <div class="form-items-input">{{ vipData?.vip_info?.wechat_count }}个</div>
+                </li>
+                <li class="form-items" v-if="!isEmpty(vipData?.expansion_info)">
+                  <span class="form-items-label">扩容公众号：</span>
+                  <div class="form-items-input">{{ vipData?.expansion_info?.expansion_num }}个</div>
+                  <span data-v-9e99f9f3="" class="text-3 leading-4.5 text-black-600 ml-2 ">扩容费用：{{
+                    vipData?.expansion_info?.amount }}元</span>
                 </li>
                 <li class="form-items">
                   <span class="form-items-label">会员资费：</span>
-                  <div class="form-items-input">{{ selectItems?.vip_info?.price }}元/{{ selectItems?.vip_info?.time_unit
+                  <div class="form-items-input">{{ vipData?.vip_info?.price }}元/{{ vipData?.vip_info?.time_unit
                     }}
                   </div>
                 </li>
-                <li class="form-items">
+                <!-- <li class="form-items">
                   <span class="form-items-label">到期时间：</span>
-                  <div class="form-items-input">{{ selectItems?.end_date }}</div>
-                </li>
-                <li class="form-items">
+                  <div class="form-items-input">{{ vipData?.end_date }}</div>
+                </li> -->
+                <li class="form-items" v-if="vipData?.from_agent_code_status !== 'hidden'">
                   <span class="form-items-label">填写邀请码：</span>
                   <div class="form-items-input"><el-input v-model="invitationCode" maxlength="6" minlength="6"
                       placeholder="请输入邀请码" /></div>
@@ -66,15 +71,15 @@
                   <div class="form-items-input">
                     <div class="text-3 text-primary-800">
                       <span>￥</span>
-                      <span class="text-6 leading-9 font-600 mr-1">{{ selectItems?.vip_info?.price }}</span>
+                      <span class="text-6 leading-9 font-sans-600 mr-1">{{ vipData?.vip_info?.amount }}</span>
                       <span class="ml-1 text-black-600 text-3 line-through"
-                        v-if="selectItems?.vip_info?.price != selectItems?.vip_info?.market_price">原价：￥{{
-                          selectItems?.vip_info?.market_price
+                        v-if="vipData?.vip_info?.price != vipData?.vip_info?.market_price">原价：￥{{
+                          vipData?.vip_info?.market_price
                         }}</span>
                     </div>
-                    <div class="text-3 leading-4.5 text-black-700 mt-2" v-if="!isEmpty(selectItems?.vip_info?.remain)">
-                      当前个人版VIP剩余{{ selectItems?.vip_info?.remain?.remain_day }}天，可抵扣￥{{
-                        selectItems?.vip_info?.remain?.remain_price }}
+                    <div class="text-3 leading-4.5 text-black-700 mt-2" v-if="vipData?.other?.remain?.remain_price > 0">
+                      当前个人版VIP剩余{{ vipData?.other?.remain?.remain_day }}天，可抵扣￥{{
+                        vipData?.other?.remain?.remain_price }}
                     </div>
                   </div>
                 </li>
@@ -128,7 +133,7 @@ const props = defineProps({
 })
 
 
-const selectItems = ref()
+const vipData = ref()
 
 const dialogDetailsRef = ref(null)
 const dialogPayModal = ref(false)
@@ -141,7 +146,6 @@ const payData = ref({})
 
 
 watch(invitationCode, () => {
-
   Xdebounce(getDiscount)
 });
 
@@ -150,29 +154,27 @@ function openDialogDetails(obj) {
   dialogDetailsRef.value.openModal(obj)
 }
 
-async function getDiscount() {
+async function getDiscount(isShow = false) {
   const query = {
     act: 'verify_discount_code',
     from_agent_code: invitationCode.value,
-    id: selectItems.value?.vip_info?.id,
-
+    id: vipData.value?.vip_info?.id,
   }
+
   const getRes = await pullVip(query);
 
   if (!getRes?.status) return;
 
-  if (getRes?.data?.is_discount == 1) {
+  if (getRes?.data?.is_discount == 1 && isShow) {
     ElMessage.success('优惠成功');
   }
 
-  selectItems.value.vip_info.price = getRes?.data?.price
-  selectItems.value.vip_info.market_price = getRes?.data?.market_price
-
+  vipData.value.vip_info = { ...vipData.value.vip_info, ...getRes?.data }
 }
 
 const openModal = (items) => {
   dialogVipModal.value = true
-  selectItems.value = items
+  vipData.value = items
   invitationCode.value = items?.from_agent_code || ''
 }
 
@@ -198,9 +200,9 @@ const createOrder = async () => {
 
   const query = {
     act: 'create_order',
-    id: selectItems.value?.vip_info?.id,
+    id: vipData.value?.vip_info?.id,
     pay_type: pay_type.value,
-    from_agent_code: selectItems.value?.from_agent_code
+    from_agent_code: vipData.value?.from_agent_code
   };
 
   const oldOrder = JSON.parse(localStorage.getItem('order'))
@@ -211,7 +213,6 @@ const createOrder = async () => {
   }
 
   try {
-    // console.log('订单参数发生变化，需要重新创建订单')
     // 调用接口创建新订单
     const getRes = await pullVip(query);
 
@@ -247,9 +248,8 @@ const getPay = async (options) => {
     const payInfo = JSON.parse(localStorage.getItem('order'))
     // 启动支付轮询
     payStatusInterval = setInterval(() => {
-      getPayStatus(payInfo); // 根据订单 ID 轮询支付状态
-    }, 2000); // 每 1 秒轮询一次
-
+      getPayStatus(payInfo);
+    }, 2000);
 
   } catch (error) {
     console.error('支付状态失败:', error);
@@ -265,12 +265,12 @@ const payModalClose = () => {
 // 支付回调轮询
 const getPayStatus = async (options) => {
   try {
-    const getRes = await pullPay({ act: 'pay_status', ...options }); // 调用支付状态接口
+    const getRes = await pullPay({ act: 'pay_status', ...options });
     if (!getRes?.status) return
     if (getRes?.data?.pay_status === 1) {
-      clearInterval(payStatusInterval); // 清除轮询
+      clearInterval(payStatusInterval);
       ElMessage.success('支付成功');
-      dialogPayModal.value = false; // 关闭支付窗口
+      dialogPayModal.value = false;
 
       payModalClose()
       vipModalClose()

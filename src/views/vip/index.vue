@@ -35,7 +35,7 @@
           </div>
           <div class="text-center p-6">
             <!-- 套餐 -->
-            <ul class="grid grid-cols-2 gap-5 price-package ">
+            <ul class="grid  gap-5 price-package " :class="{ 'grid-cols-2': items?.vip_list.length > 1 }">
               <li class="price-package-items cursor-pointer" v-for="setMeal, index in items?.vip_list" :key="setMeal"
                 :class="{ 'col-span-2': index == 2, 'active': setMeal?.is_select === 1 }"
                 @click="activeSku(items?.version_id, setMeal?.id, setMeal?.benefits)">
@@ -48,10 +48,15 @@
               </li>
             </ul>
             <div class="mt-8">
+              <!-- 按钮类型 -->
               <div
                 class="text-4 leading-6 vip-version-item-bg-btn rounded leading-6 py-3 vip-version-item-btn-color white cursor-pointer"
-                @click="openVipModal(items?.setMealId)">
-                开通{{ items?.name }}</div>
+                @click="openVipModal(items?.setMealId)" v-if="items?.button?.type === 'button'">
+                {{ items?.button?.text }}</div>
+              <!-- 提示类型 -->
+              <div class="text-4 leading-6 border border-black-300 rounded leading-6 py-3 text-black-800 "
+                v-if="items?.button?.type === 'tips'">
+                {{ items?.button?.text }}</div>
             </div>
           </div>
           <!-- 权益 -->

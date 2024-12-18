@@ -1,7 +1,20 @@
 <template>
   <div class="group-add " v-if="dialogVisible">
-    <el-dialog v-model="dialogVisible" :title="dialogTitle" :close-on-click-modal="false" align-center
-      :before-close="modalClose">
+    <el-dialog v-model="dialogVisible" :close-on-click-modal="true" align-center :before-close="modalClose"
+      :show-close="false" :fullscreen="fullscreen" draggable>
+      <template #header="{ close, titleId, titleClass }">
+        <div class="flex-items-center">
+          <h4 :id="titleId" :class="titleClass">{{ dialogTitle }}</h4>
+          <div class="ml-auto">
+            <el-button @click="fullscreen = !fullscreen" link>
+              <i class="iconfont " :class="fullscreen ? 'icon-suoxiaohua' : 'icon-zuidahua'"></i>
+            </el-button>
+            <el-button @click="close" link>
+              <i class="iconfont icon-cuowu-xian"></i>
+            </el-button>
+          </div>
+        </div>
+      </template>
       <div class="p-4 h-full">
         <el-form :model="queryForm" label-width="auto" :rules="rules" ref="ruleFormRef">
           <el-form-item label="分组名称" prop="groupName">
@@ -54,6 +67,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { pullBalance } from '@/request/modules/vip.js';
+const fullscreen = ref(false)
 const vipMxTopUpRef = ref(null)
 const dialogDetailsRef = ref(null)
 const ruleFormRef = ref()
