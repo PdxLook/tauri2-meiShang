@@ -8,7 +8,6 @@ on:
 
 jobs:
   release:
-  	# 由于需要创建release所以需要设置写入权限
     permissions:
       contents: write
     strategy:
