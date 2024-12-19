@@ -1,7 +1,7 @@
 {
   "productName": "meiShang",
-  "version": "0.1.0",
-  "identifier": "com.mjx.app",
+  "version": "0.2.0",
+  "identifier": "com.xuanSu.app",
   "build": {
     "beforeDevCommand": "pnpm dev",
     "devUrl": "http://localhost:1420",
@@ -31,6 +31,7 @@
   "bundle": {
     "active": true,
     "targets": "all",
+    "createUpdaterArtifacts": true,
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
@@ -39,5 +40,16 @@
       "icons/icon.ico"
     ]
   },
-  "plugins": {}
+  "plugins": {
+    "updater": {
+      "active": true,
+      "windows": {
+        "installMode": "passive"
+      },
+      "endpoints": [
+        "https://github.com/user/repo/releases/latest/download/latest.json"
+      ],
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEQxOUQwMEM3NzhBQzBFNUEKUldSYURxeDR4d0NkMGNXZE9XRnNXMHhpblU3dkg0RW9UNHcxVEhucUliWE56MmRiVDZSY3ZicnQK"
+    }
+  }
 }
