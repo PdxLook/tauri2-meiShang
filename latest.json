@@ -5,7 +5,7 @@
   "platforms": {
     "windows-x86_64": {
       "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEQxOUQwMEM3NzhBQzBFNUEKUldSYURxeDR4d0NkMGNXZE9XRnNXMHhpblU3dkg0RW9UNHcxVEhucUliWE56MmRiVDZSY3ZicnQK",
-      "url": "https://github.com/PdxLook/tauri2-meiShang/releases/download/untagged-7b284027c091df76ed08/meiShang_0.2.0_x64-setup.exe"
+      "url": "https://github.com/PdxLook/tauri2-meiShang/releases/download/0.3.0/meiShang_0.3.0_x64-setup.exe"
     }
   }
 }
