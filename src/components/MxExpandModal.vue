@@ -1,24 +1,25 @@
 <template>
-  <div class="mx-vip-modal">
-    <el-dialog v-model="dialogVipModal" width="640" :before-close="vipModalClose" :close-on-click-modal="false"
-      align-center :show-close="showClose">
+  <div class="mx-expand-modal" v-if="expandData">
+    <el-dialog v-model="dialogShow" width="640" :before-close="dialogClose" :close-on-click-modal="false" align-center
+      :show-close="showClose">
       <div class="">
         <div class="vip-bg p-6">
-          <p class="font-sans-500 text-4.5 text-black-900 leading-7">{{ vipData?.user_info?.mobile }}</p>
-          <p class="text-3 leading-4.5 text-black-800 mt-2">欢迎加入每商矩阵系统</p>
-          <!-- <p class="text-3 leading-4.5 text-black-800 mt-2">未开通/个人版 到期时间：{{ vipData?.end_date }}</p> -->
+          <p class="font-sans-500 text-4.5 text-black-900 leading-7">{{ expandData?.user_info?.mobile }},欢迎加入每商矩阵系统</p>
+          <p class="text-3 leading-4.5 text-black-800 mt-2">{{ expandData?.vip_info?.name }} 到期时间：{{
+            expandData?.vip_info?.end_date }}</p>
         </div>
         <div class="p-6 pb-0">
           <div class="flex space-x-8">
             <div class="flex-none bg-black-200 rounded w-[200px] px-4 py-5">
               <div class="card">
                 <div class="text-center font-sans-500 text-3.5 text-black-900 leading-5">
-                  <p>{{ vipData?.vip_info?.name }}</p>
+                  <p>{{ expandData?.expansion_info?.name }}</p>
                   <p>会员专属权益</p>
                 </div>
                 <div class="border-t border-black-400 my-5"></div>
                 <ul class="text-3 leading-4.5 text-black-800 rights-lists space-y-3">
-                  <li class="rights-lists-items" v-for="(rights, index) in vipData?.vip_info?.benefits" :key="index">
+                  <li class="rights-lists-items" v-for="(rights, index) in expandData?.expansion_info?.benefits"
+                    :key="index">
                     <span class="">{{ rights?.title }}</span>
                   </li>
                 </ul>
@@ -28,32 +29,40 @@
               <ul class="form space-y-9">
                 <li class="form-items">
                   <span class="form-items-label">会员类型：</span>
-                  <div class="form-items-input">{{ vipData?.vip_info?.name }}</div>
+                  <div class="form-items-input">{{ expandData?.expansion_info?.name }}</div>
+                  <div class="ml-auto text-3.5 leading-5 text-black-600 cursor-pointer"
+                    @click="openDialogDetails({ code: 'expansion' })">扩容详细说明</div>
                 </li>
                 <li class="form-items">
                   <span class="form-items-label">运营公众号：</span>
-                  <div class="form-items-input">{{ vipData?.vip_info?.wechat_count }}个</div>
-                </li>
-                <li class="form-items" v-if="!isEmpty(vipData?.expansion_info)">
-                  <span class="form-items-label">扩容公众号：</span>
-                  <div class="form-items-input">{{ vipData?.expansion_info?.expansion_num }}个</div>
-                  <span data-v-9e99f9f3="" class="text-3 leading-4.5 text-black-600 ml-2 ">扩容费用：{{
-                    vipData?.expansion_info?.amount }}元</span>
-                </li>
-                <li class="form-items">
-                  <span class="form-items-label">会员资费：</span>
-                  <div class="form-items-input">{{ vipData?.vip_info?.price }}元/{{ vipData?.vip_info?.time_unit
-                    }}
+                  <div class="form-items-input">
+                    <el-input-number v-model="wechatCount" :step="5" :min="5" @change="changeWechatCount" step-strictly>
+                      <template #suffix>
+                        <span>个</span>
+                      </template>
+                    </el-input-number>
                   </div>
                 </li>
-                <!-- <li class="form-items">
+                <li class="form-items">
+                  <span class="form-items-label">扩容资费：</span>
+                  <div class="form-items-input">{{ expandData?.expansion_info?.price }}元/{{
+                    expandData?.expansion_info?.time_unit
+                  }}
+                    <span class="text-3 leading-4.5 text-black-600 ml-2 line-through"
+                      v-if="expandData?.expansion_info?.mp_monthly_one_price">平均每号{{
+                        expandData?.expansion_info?.mp_monthly_one_price }}元/月</span>
+                  </div>
+                </li>
+                <li class="form-items">
                   <span class="form-items-label">到期时间：</span>
-                  <div class="form-items-input">{{ vipData?.end_date }}</div>
-                </li> -->
-                <li class="form-items" v-if="vipData?.from_agent_code_status !== 'hidden'">
+                  <div class="form-items-input">{{ expandData?.vip_info?.end_date }}</div>
+                </li>
+
+                <li class="form-items" v-if="expandData?.from_agent_code_status !== 'hidden'">
                   <span class="form-items-label">填写邀请码：</span>
                   <div class="form-items-input"><el-input v-model="invitationCode" maxlength="6" minlength="6"
-                      placeholder="请输入邀请码" /></div>
+                      placeholder="请输入邀请码" />
+                  </div>
                 </li>
                 <li class="form-items">
                   <span class="form-items-label">支付方式：</span>
@@ -71,15 +80,15 @@
                   <div class="form-items-input">
                     <div class="text-3 text-primary-800">
                       <span>￥</span>
-                      <span class="text-6 leading-9 font-sans-600 mr-1">{{ vipData?.vip_info?.amount }}</span>
-                      <span class="ml-1 text-black-600 text-3 line-through"
-                        v-if="vipData?.vip_info?.price != vipData?.vip_info?.market_price">原价：￥{{
-                          vipData?.vip_info?.market_price
-                        }}</span>
+                      <span class="text-6 leading-9 font-sans-600 mr-1">{{ expandData?.expansion_info?.amount }}</span>
+                      <!-- <span class="ml-1 text-black-600 text-3 line-through"
+                        v-if="expandData?.expansion_info?.price != expandData?.expansion_info?.market_price">原价：￥{{
+                          expandData?.expansion_info?.market_price
+                        }}</span> -->
                     </div>
-                    <div class="text-3 leading-4.5 text-black-700 mt-2" v-if="vipData?.other?.remain?.remain_price > 0">
-                      当前个人版VIP剩余{{ vipData?.other?.remain?.remain_day }}天，可抵扣￥{{
-                        vipData?.other?.remain?.remain_price }}
+                    <div class="text-3 leading-4.5 text-black-700 mt-2"
+                      v-if="expandData?.expansion_info?.discount_price > 0">
+                      优惠金额：{{ expandData?.expansion_info?.discount_price }}
                     </div>
                   </div>
                 </li>
@@ -92,17 +101,11 @@
       </div>
       <template #footer>
         <div class="p-6 dialog-footer flex-items-center">
-          <div class="text-3.5 text-black-800 mr-auto text-left">
-            <div class="flex-items-center ">
-              <el-checkbox v-model="agreement" text-color="#EB0013" fill="#EB0013" label="购买则表示同意" size="large"
-                @change="isAgreementChange" />
-              <div class="cursor-pointer" @click="openDialogDetails({ code: 'vip' })">《会员服务协议》</div>
-            </div>
-            <span class="text-primary-800 text-3 leading-5" v-if="isAgreement">请阅读并同意会员服务协议</span>
+          <div class="text-3.5 text-black-800 flex-items-center mr-auto"><el-checkbox v-model="agreement"
+              text-color="#EB0013" fill="#EB0013" label="购买则表示同意" size="large" />
+            <div class="cursor-pointer" @click="openDialogDetails({ code: 'vip' })">《会员服务协议》</div>
           </div>
-          <!-- <el-button size="large" @click="dialogVipModal = false">取消</el-button> -->
-          <el-button type="primary" color="#EB0013" size="large" @click="Xthrottle(createOrder, 1000)"
-            :disabled="isAgreement">
+          <el-button type="primary" color="#EB0013" size="large" @click="Xthrottle(createOrder, 1000)">
             提交订单
           </el-button>
         </div>
@@ -127,7 +130,7 @@
 
 <script setup>
 import { ref, watch } from 'vue'
-import { pullVip, pullPay } from '@/request/modules/vip.js';
+import { pullPay, pullExpansion } from '@/request/modules/vip.js';
 import { isEmpty, Xthrottle, Xdebounce } from '@/utils/MxTool.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import QrcodeVue from 'qrcode.vue'
@@ -138,108 +141,103 @@ const props = defineProps({
     default: true
   }
 })
-const vipData = ref()
+const expandData = ref()
 const dialogDetailsRef = ref(null)
 const dialogPayModal = ref(false)
-const dialogVipModal = ref(false)
+const dialogShow = ref(false)
 const invitationCode = ref()
 const agreement = ref()
-const isAgreement = ref(true)
 const pay_type = ref('2')
 const orderData = ref({})
 const payData = ref({})
+const wechatCount = ref(5)
 
 watch(invitationCode, () => {
-  Xdebounce(getDiscount)
+  getNewAmount(true)
 });
 
+const changeWechatCount = () => {
+  getNewAmount()
+}
 
+// 获取新金额
+async function getNewAmount(isShow = false) {
+  const query = {
+    act: 'compute_amount',
+    num: wechatCount.value,
+    from_agent_code: invitationCode.value,
+  }
+
+  const getRes = await pullExpansion(query);
+  if (!getRes?.status) return ElMessage.error(getRes?.msg);
+  if (getRes?.data?.is_discount == 1 && isShow) {
+    ElMessage.success('优惠成功');
+  }
+  expandData.value.expansion_info = { ...expandData.value?.expansion_info, ...getRes?.data }
+
+  // wechatCount.value = Number(getRes?.data?.num) || 5
+}
+
+// 打开单页详情弹窗
 function openDialogDetails(obj) {
   dialogDetailsRef.value.openModal(obj)
 }
 
-async function getDiscount(isShow = false) {
-  const query = {
-    act: 'verify_discount_code',
-    from_agent_code: invitationCode.value,
-    id: vipData.value?.vip_info?.id,
+// 获取优惠码
+async function getExpansion(query) {
 
-  }
-  const getRes = await pullVip(query);
+  const getRes = await pullExpansion(query);
 
-  if (!getRes?.status) return;
+  if (!getRes?.status) return ElMessage.error(getRes?.msg);
 
-  if (getRes?.data?.is_discount == 1 && isShow) {
-    ElMessage.success('优惠成功');
-  }
-
-  vipData.value.vip_info = { ...vipData.value.vip_info, ...getRes?.data }
-
+  expandData.value = getRes?.data
+  invitationCode.value = getRes?.data?.from_agent_code || ''
+  wechatCount.value = getRes?.data?.expansion_info?.num || 5
 }
 
-const openModal = (items) => {
-  dialogVipModal.value = true
-  vipData.value = items
-  invitationCode.value = items?.from_agent_code || ''
+const openModal = () => {
+  getExpansion()
+  dialogShow.value = true
 }
 
 const closeModal = () => {
-  dialogVipModal.value = false
+  dialogShow.value = false
   emit('close')
 }
 
-const vipModalClose = () => {
+const dialogClose = () => {
   closeModal()
-
-  localStorage.removeItem('h5-order-info')
-  localStorage.removeItem('order')
+  localStorage.removeItem('expand')
 }
 
-const isAgreementChange = (val) => {
-  console.log(val)
-  isAgreement.value = !val
-}
 const createOrder = async () => {
   clearInterval(payStatusInterval);
-  if (isEmpty(agreement.value)) return isAgreement.value = true;
-
-  const oldQuery = JSON.parse(localStorage.getItem('h5-order-info') || '{}');
+  if (isEmpty(agreement.value)) return ElMessage.error('请阅读并同意会员服务协议');
 
   const query = {
     act: 'create_order',
-    id: vipData.value?.vip_info?.id,
+    num: wechatCount.value,
     pay_type: pay_type.value,
     from_agent_code: invitationCode.value
   };
 
-  const oldOrder = JSON.parse(localStorage.getItem('order'))
-  // 比对当前订单参数与本地存储的订单参数
-  if (JSON.stringify(oldQuery) === JSON.stringify(query) && !isEmpty(oldOrder)) {
-
-    return getPay(oldOrder);
-  }
-
   try {
     // 调用接口创建新订单
-    const getRes = await pullVip(query);
-
-    if (!getRes?.status) return
-
-    // 存储新的订单参数到本地
-    localStorage.setItem('h5-order-info', JSON.stringify(query));
-    localStorage.setItem('order', JSON.stringify(getRes?.data));
-
+    const getRes = await pullExpansion(query);
+    if (!getRes?.status) return ElMessage.error(getRes?.msg);
+    localStorage.setItem('expand', JSON.stringify(getRes?.data));
     orderData.value = getRes?.data;
-
     getPay(orderData.value)
   } catch (error) {
     console.error('创建订单失败:', error);
   }
+
 };
 
 
 let payStatusInterval = null;
 const getPay = async (options) => {
+
   try {
     const getRes = await pullPay({
       ...options
@@ -251,15 +249,17 @@ const getPay = async (options) => {
 
     dialogPayModal.value = true
 
-    const payInfo = JSON.parse(localStorage.getItem('order'))
+    const payInfo = JSON.parse(localStorage.getItem('expand'))
     // 启动支付轮询
     payStatusInterval = setInterval(() => {
       getPayStatus(payInfo);
     }, 2000);
 
+
   } catch (error) {
     console.error('支付状态失败:', error);
   }
+
 }
 
 const payModalClose = () => {
@@ -278,19 +278,16 @@ const getPayStatus = async (options) => {
       dialogPayModal.value = false;
 
       payModalClose()
-      vipModalClose()
+      dialogClose()
       return;
     }
-    // if (getRes?.pay_status === 0) {
-    //   clearInterval(payStatusInterval);
-    //   ElMessage.error('支付失败，请重试');
-    //   return;
-    // }
   } catch (error) {
-    console.error('支付状态轮询失败:', error);
-    clearInterval(payStatusInterval); // 清除轮询
+    // console.error('支付状态轮询失败:', error);
+    clearInterval(payStatusInterval);
   }
 };
+
+
 
 // 暴露方法
 defineExpose({
@@ -312,6 +309,7 @@ defineExpose({
 :deep(.el-dialog) {
   --el-dialog-padding-primary: 0;
   --el-color-primary: #EB0013;
+  --el-input-focus-border-color: #D9D9D9;
   border-radius: 4px;
   overflow: hidden;
 
@@ -346,7 +344,6 @@ defineExpose({
   align-items: center;
   font-size: 14px;
   color: #333;
-
 
   &-label {
     width: 84px;

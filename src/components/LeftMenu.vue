@@ -16,7 +16,7 @@
       </li>
     </ul>
 
-    <div class="mt-auto copyright text-center text-3 text-black-600 p-6">当前版本系统：{{ tauriVersion }}</div>
+    <div class="mt-auto copyright text-center text-3 text-black-600 p-6">当前版本系统：v{{ tauriVersion }}</div>
   </div>
 </template>
 

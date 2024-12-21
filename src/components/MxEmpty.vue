@@ -7,7 +7,6 @@
 
 <script setup>
 import { ref, useSlots, watch } from 'vue'
-
 const posts = defineProps({
   tips: {
     type: String,
@@ -19,7 +18,5 @@ const posts = defineProps({
     required: true
   }
 })
-
 </script>
-
 <style scoped></style>

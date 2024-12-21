@@ -10,7 +10,7 @@
         <div class="p-6 pb-0">
           <div class="">
             <div class="flex-items-center justify-between text-3 leading-4.5 text-black-700">
-              <span>商豆兑换比例：{{ balanceData?.ratio_list }}商豆=1元</span>
+              <span>商豆兑换比例：1元兑换{{ balanceData?.ratio_list }}商豆</span>
               <span class="cursor-pointer" @click="openDialogDetails({ code: 'balance_rule' })">了解商豆使用规则</span>
             </div>
             <ul class="top-up grid grid-cols-3 gap-5 mt-5 text-black-600 text-3.5 leading-5">
@@ -30,7 +30,7 @@
                 <span class="top-up-items-icon iconfont icon-dui1-2 absolute text-primary-800"></span>
                 <div>
                   <p class="text-4.5 font-sans-500 text-black-800 leading-7 mb-2">自定义充值金额</p>
-                  <p>{{ balanceData?.ratio_list }}商豆=1元</p>
+                  <p>1元兑换{{ balanceData?.ratio_list }}商豆</p>
                 </div>
               </li>
             </ul>
@@ -66,10 +66,9 @@
       </template>
     </el-dialog>
     <MxDialogDetails ref="dialogDetailsRef" />
-
     <el-dialog v-model="dialogPayModal" width="400" :before-close="payModalClose" align-center
       :close-on-click-modal="false">
-      <div class="p-5 text-4.5 font-600 text-black-800">
+      <div class="p-5 text-4.5 font-sans-500 text-black-800">
         {{ payData?.pay_type === 2 ? '微信支付' : '支付宝支付' }}
       </div>
       <div class="flex-center flex-col p-5 py-10 border-t border-black-300">

@@ -43,7 +43,8 @@
     "core:window:allow-set-position",
     "core:window:allow-set-always-on-bottom",
     "core:webview:allow-create-webview-window",
-    "updater:default"
+    "updater:default",
+    "shell:allow-open"
   ],
   "platforms": ["windows"],
   "local": true,

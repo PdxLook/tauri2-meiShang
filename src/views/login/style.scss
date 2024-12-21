@@ -1,0 +1,16 @@
+.login {
+  -webkit-app-region: drag;
+
+  .login-box {
+    -webkit-app-region: no-drag;
+  }
+
+  background-image: url('@/assets/images/login.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
+
+}
+
+.no-drag {
+  -webkit-app-region: no-drag;
+}

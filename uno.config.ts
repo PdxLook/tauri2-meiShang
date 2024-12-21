@@ -80,7 +80,7 @@ export default defineConfig({
       },
       primary: {
         "900": "#CC0011",
-        "800": "#EB0013",
+        "800": "#ff5b5c",
         "700": "#F24B59",
         "200": "#FAACB3",
         "100": "#FFF3F4",

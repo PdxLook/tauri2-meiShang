@@ -3,39 +3,30 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue';
 import { check } from '@tauri-apps/plugin-updater';
 import { relaunch } from '@tauri-apps/plugin-process';
 
-try {
+const performUpdate = async () => {
   const update = await check();
-  console.log(update);
   if (update) {
-    console.log(
-      `发现更新 ${update.version} from ${update.date} with notes ${update.body}`
-    );
-    let downloaded = 0;
-    let contentLength = 0;
-    // alternatively we could also call update.download() and update.install() separately
-    await update.downloadAndInstall((event) => {
-      switch (event.event) {
-        case 'Started':
-          contentLength = event.data.contentLength;
-          console.log(`开始下载 ${event.data.contentLength} 字节`);
-          break;
-        case 'Progress':
-          downloaded += event.data.chunkLength;
-          console.log(`下载 ${downloaded} 长度 ${contentLength}`);
-          break;
-        case 'Finished':
-          console.log('下载完成了');
-          break;
-      }
-    });
-
-    console.log('更新安装');
-    await relaunch();
+    ElMessageBox.alert(`发现更新: 版本 ${update.version}, 更新日志: ${update.body}`, '更新提示', {
+      confirmButtonText: '更新',
+      callback: async (action) => {
+        up(update)
+      },
+    })
   }
-} catch (error) {
-  console.error('Error during update:', error);
-}
+};
+
+async function up(update) {
+  await update.downloadAndInstall();
+  ElMessage.success('更新成功, 重启中...');
+  await relaunch();
+};
+
+// 在组件挂载时自动检查更新
+onMounted(() => {
+  performUpdate();
+});
 </script>

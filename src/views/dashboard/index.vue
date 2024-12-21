@@ -4,8 +4,8 @@
 </route>
 <template>
   <main class="index bg-black-200 " v-if="indexData">
-    <div class="grid grid-cols-12 gap-4">
-      <div class="col-span-12 lg:col-span-9 space-y-4">
+    <div class="grid grid-cols-5 gap-4">
+      <div class="col-span-12 lg:col-span-4 space-y-4">
         <!-- 实时概览 -->
         <div class="bg-white rounded overflow-hidden p-6">
           <MxCard title="实时概览">
@@ -21,26 +21,26 @@
               <ul class="col-span-1 grid grid-cols-2 gap-6 pl-10 pr-16">
                 <li class="space-y-2">
                   <div class="text-3.5 text-black-700 leading-5">我的公众号</div>
-                  <div class="font-600 text-5 leading-7.5 text-black-800">{{
+                  <div class="font-sans-600 text-5 leading-7.5 text-black-800">{{
                     formatNumber(indexData?.total?.wechat_count) }}
                   </div>
-                  <a class="text-3.5 text-blue-900 leading-5" href="meishang:添加公众号" target="_blank">新增公众号</a>
+                  <a class="text-3.5 text-blue-900 leading-5" href="/weChat/">新增公众号</a>
                 </li>
                 <li class="space-y-2">
                   <div class="text-3.5 text-black-700 leading-5">
                     <span>登录失效</span>
-                    <el-tooltip class="box-item" effect="dark" content="登录失效" placement="bottom">
+                    <el-tooltip class="box-item" effect="dark" content="登录状态已失效的公众号，需要重新登录" placement="bottom">
                       <span class="iconfont icon-wen1-2 text-3.5 text-black-600 ml-1"></span>
                     </el-tooltip>
                   </div>
-                  <div class="font-600 text-5 leading-7.5 text-black-800">{{
+                  <div class="font-sans-600 text-5 leading-7.5 text-black-800">{{
                     formatNumber(indexData?.total?.wechat_expire_count)
                   }}</div>
-                  <a class="text-3.5 text-blue-900 leading-5" href="meishang:重新登录" target="_blank">重新登录</a>
+                  <a class="text-3.5 text-blue-900 leading-5" href="/weChat/">重新登录</a>
                 </li>
                 <li class="space-y-2">
                   <div class="text-3.5 text-black-700 leading-5">粉丝数</div>
-                  <div class="font-600 text-5 leading-7.5 text-black-800">{{
+                  <div class="font-sans-600 text-5 leading-7.5 text-black-800">{{
                     formatNumber(indexData?.total?.fans_count) }}
                   </div>
                   <div class="text-3.5 text-black-700 leading-5">昨日新增：{{
@@ -49,7 +49,7 @@
                 </li>
                 <li class="space-y-2">
                   <div class="text-3.5 text-black-700 leading-5">月浏览量</div>
-                  <div class="font-600 text-5 leading-7.5 text-black-800">{{
+                  <div class="font-sans-600 text-5 leading-7.5 text-black-800">{{
                     formatNumber(indexData?.total?.view_count) }}
                   </div>
                   <div class="text-3.5 text-black-700 leading-5">昨日浏览：{{
@@ -61,19 +61,19 @@
               <ul class="col-span-1 grid grid-cols-2 gap-6 pl-16 pr-10">
                 <li class="space-y-2">
                   <div class="text-3.5 text-black-700 leading-5">词库管理</div>
-                  <div class="font-600 text-5 leading-7.5 text-black-800">{{
+                  <div class="font-sans-600 text-5 leading-7.5 text-black-800">{{
                     formatNumber(indexData?.total?.words_count) }}
                   </div>
-                  <a class="text-3.5 text-blue-900 leading-5" href="meishang:新建词库" target="_blank">新建词库</a>
+                  <a class="text-3.5 text-blue-900 leading-5" href="/keyword/">新建词库</a>
                 </li>
                 <li class="space-y-2">
                   <div class="text-3.5 text-black-700 leading-5">
                     <span>我的商豆</span>
-                    <el-tooltip class="box-item" effect="dark" content="我的商豆" placement="bottom">
+                    <el-tooltip class="box-item" effect="dark" content="商豆是用于平台内创作标题和内容的创作消耗的一种虚拟货币" placement="bottom">
                       <span class="iconfont icon-wen1-2 text-3.5 text-black-600 ml-1"></span>
                     </el-tooltip>
                   </div>
-                  <div class="font-600 text-5 leading-7.5 text-black-800">{{
+                  <div class="font-sans-600 text-5 leading-7.5 text-black-800">{{
                     formatNumber(indexData?.user_info?.balance) }}
                   </div>
                   <a class="text-3.5 text-blue-900 leading-5 cursor-pointer" @click="vipMxTopUpOpen">立即充值</a>
@@ -81,7 +81,7 @@
                 </li>
                 <li class="space-y-2">
                   <div class="text-3.5 text-black-700 leading-5">发布文章数</div>
-                  <div class="font-600 text-5 leading-7.5 text-black-800">{{
+                  <div class="font-sans-600 text-5 leading-7.5 text-black-800">{{
                     formatNumber(indexData?.total?.publish_count) }}
                   </div>
                   <div class="text-3.5 text-black-700 leading-5 h-5">
@@ -95,10 +95,9 @@
         <!-- 开通会员 -->
         <div class="open-ship rounded overflow-hidden p-14">
           <div class="text-7 leading-10.5 font-500"><span class="text-primary-800">开通VIP会员</span>，玩转公众号矩阵</div>
-          <p class="text-4 leading-6 mt-5 ">AICG内容创作 / 多账号统一管理 / 海量文章模板 / 专属顾问服务支持</p>
+          <p class="text-4 leading-6 mt-5 ">AIGC内容创作 / 多账号统一管理 / 海量文章模板 / 专属顾问服务支持</p>
           <div class="flex-items-center mt-6 space-x-6">
-            <router-link to="/vip"
-              class="bg-primary-800 text-white rounded w-24 h-10 flex-center hover:text-white">立即开通</router-link>
+            <a class="bg-primary-800 text-white rounded w-24 h-10 flex-center hover:text-white" href="/vip/">立即开通</a>
             <span class="text-3.5 text-black-800">查看VIP权限</span>
           </div>
         </div>
@@ -107,14 +106,14 @@
         <div class="bg-white rounded overflow-hidden p-6 space-y-8">
           <!-- 新手操作流程 -->
           <MxCard title="新手操作流程">
-            <div class="bg-black-200 rounded-lg p-7.5 2xl:px-25">
+            <div class="bg-black-200 rounded-lg p-7.5 px-7.5 2xl:px-25">
               <ul class="flex-center justify-between index-procedure">
-                <li class="flex-none bg-black-200" v-for="items, index in processSteps" :key="index">
+                <li class="flex-none bg-black-200" v-for="(stepsItem, stepsKey) in stepsArr" :key="stepsItem">
                   <div class="text-center">
                     <div class="size-14 flex-center border border-black-500 rounded-full mx-auto">
-                      <span class="iconfont text-6 text-black-800 icon-huiyuan2-2" :class="items.icon"></span>
+                      <span class="iconfont text-6 text-black-800 " :class="stepsItem.icon"></span>
                     </div>
-                    <p class="text-3.5 leading-5 text-black-800 mt-4">{{ items.title }}</p>
+                    <p class="text-3.5 leading-5 text-black-800 mt-4">{{ stepsKey + 1 }}.{{ stepsItem.title }}</p>
                   </div>
                 </li>
               </ul>
@@ -135,7 +134,7 @@
           </MxCard>
         </div>
       </div>
-      <div class="col-span-12 lg:col-span-3 space-y-4">
+      <div class="col-span-12 lg:col-span-1 space-y-4">
         <!-- 系统公告 -->
         <div class="bg-white rounded overflow-hidden p-6">
           <MxCard title="系统公告" :rightMore="{ text: '更多', fun: mxMessagOpen }">
@@ -151,9 +150,6 @@
               </ul>
             </MxEmpty>
           </MxCard>
-
-          <MxMessage ref="mxMessageRef" />
-          <MxMessageDetails ref="mxMessageDetailsRef" />
         </div>
 
         <!-- 客服 -->
@@ -199,8 +195,6 @@
                           </div>
                         </template>
                       </el-popover>
-
-
                     </div>
                   </div>
                 </li>
@@ -208,10 +202,10 @@
                   <div class="flex-items-center justify-between">
                     <div class="flex-1 flex-items-center">
                       <div class="flex-none">
-                        <img src="@/assets/images/6387.svg" alt="技术合作" class="size-8 object-cover">
+                        <img src="@/assets/images/6387.svg" alt="商务合作" class="size-8 object-cover">
                       </div>
                       <div class="flex-1 ml-3 space-y-1">
-                        <p class="text-black-700">技术合作</p>
+                        <p class="text-black-700">商务合作</p>
                         <p class="text-black-800">{{ indexData?.contact?.phone }}</p>
                       </div>
                     </div>
@@ -231,22 +225,26 @@
               <img :src="items?.image" :alt="items?.title" class="w-full object-cover">
             </li>
           </ul>
-          <MxDialogDetails ref="dialogDetailsRef" />
         </div>
       </div>
     </div>
+
+    <!-- 公告列表 -->
+    <MxMessage ref="mxMessageRef" />
+    <!-- 公告详情 -->
+    <MxMessageDetails ref="mxMessageDetailsRef" />
+    <!-- 详情弹窗 -->
+    <MxDialogDetails ref="dialogDetailsRef" />
   </main>
 
 </template>
 
 <script setup>
 import { ref, onMounted, watch } from 'vue';
-
 import { pullBalance } from '@/request/modules/vip.js';
 import { pullIndex } from '@/request/modules/index.js';
 import { isEmpty, formatNumber } from '@/utils/MxTool.js'
 import { useUserStore } from '@/stores/user';
-
 const userStore = useUserStore();
 const dialogDetailsRef = ref(null)
 const vipMxTopUpRef = ref(null)
@@ -254,34 +252,39 @@ const mxMessageRef = ref(null)
 const mxMessageDetailsRef = ref(null)
 const indexData = ref()
 
-const processSteps = ref([
+// 操作流程
+const stepsArr = [
   {
-    title: '1.开通VIP会员',
+    title: '开通VIP会员',
     icon: 'icon-huiyuan2-2',
   },
   {
-    title: '2.添加公众号',
+    title: '添加公众号',
     icon: 'icon-fenxiang-weixin',
   },
   {
-    title: '3.添加词库',
+    title: '添加词库',
     icon: 'icon-yuedu1-2',
   },
   {
-    title: '4.审核标题/文章',
+    title: '审核标题/文章',
     icon: 'icon-zhang1-2',
   },
   {
-    title: '5.开始发布文章',
+    title: '开始发布文章',
     icon: 'icon-fasong1-2',
   },
-])
+]
 
+/**
+ * 跳转详情
+ * @param items object 跳转参数
+ */
 function openDialogDetails(items) {
   if (items?.jump_type === '1') {
     dialogDetailsRef.value.openModal({ page_id: items?.jump_id })
   } else {
-    console.log('未定义的跳转类型')
+    ElMessage.error(`未定义的跳转类型:${items?.jump_type}`);
   }
 }
 
@@ -297,7 +300,6 @@ const mxMessageDetailsRefOpen = (id) => {
   mxMessageDetailsRef.value.openDrawer(id)
 }
 
-
 async function getBalance() {
   const getRes = await pullBalance()
   if (!getRes?.status) return
@@ -305,16 +307,9 @@ async function getBalance() {
 }
 
 async function getData() {
-  // const loading = ElLoading.service({
-  //   lock: true,
-  //   text: 'Loading',
-  //   background: 'rgba(0, 0, 0, 0.7)',
-  // })
   const getRes = await pullIndex()
   if (!getRes?.status) return
   indexData.value = getRes?.data
-
-  // loading.close()
 }
 
 watch(() => userStore.isLoggedIn, (newIsLoggedIn) => {
@@ -323,35 +318,12 @@ watch(() => userStore.isLoggedIn, (newIsLoggedIn) => {
 });
 
 onMounted(() => {
+  document.title = '控制台 - 每商公众号矩阵软件'
   if (userStore.isLoggedIn) return
   getData();
 });
 </script>
 
 <style lang="scss" scoped>
-.open-ship {
-  background-image: url('@/assets/images/index-vip-bg@2x.webp');
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-}
-
-.index-procedure {
-  position: relative;
-
-  &::after {
-    content: '';
-    border-top: 1px dashed #D9D9D9;
-    position: absolute;
-    left: 0;
-
-    top: 28px;
-    width: 100%;
-  }
-
-  &>li {
-    position: relative;
-    z-index: 1;
-  }
-}
+@use './style' as *;
 </style>

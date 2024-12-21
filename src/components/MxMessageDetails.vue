@@ -1,12 +1,12 @@
 <template>
-  <div class="mx-message-details">
-    <el-drawer v-model="drawer" direction="rtl" :before-close="drawerClose" size="25%">
+  <div class="mx-message-details" v-if="data">
+    <el-drawer v-model="drawer" direction="rtl" :before-close="drawerClose" size="50%">
       <template #header>
-        <h4 class="text-5 leading-7.5 text-black-900">系统公告</h4>
+        <h4 class="text-5 leading-7.5 text-black-900">{{ drawerTitle }}</h4>
       </template>
       <template #default>
         <div class="border-t border-black-300 pt-5">
-          <div class="text-4.5 font-600 ">{{ data?.title }}</div>
+          <div class="text-4.5 font-sans-500 ">{{ data?.title }}</div>
           <div class="text-3.5 leading-7 text-black-800 mt-4">
             <div class="" v-html="data?.content"></div>
           </div>
@@ -28,15 +28,13 @@ const query = ref({
 })
 
 const data = ref()
+const drawerTitle = ref('系统公告')
 
-const openDrawer = (id) => {
+const openDrawer = async (id) => {
   data.value = []
-  drawer.value = true
   query.value.page_id = id
 
-  if (isEmpty(query.value.page_id)) return ElMessage.error('参数错误');
-
-  getData()
+  await getData()
 }
 
 const closeDrawer = () => {
@@ -48,9 +46,15 @@ const drawerClose = () => {
 }
 
 async function getData() {
-  const getRes = await pullPage(query.value)
-  if (!getRes?.status) return
-  data.value = getRes.data
+  try {
+    if (isEmpty(query.value.page_id)) return ElMessage.error('参数错误');
+    const getRes = await pullPage(query.value)
+    if (!getRes?.status) return ElMessage.error(getRes?.msg);
+    data.value = getRes.data
+    drawer.value = true
+  } catch (error) {
+    ElMessage.error('获取数据失败，请重试');
+  }
 }
 
 // 暴露方法

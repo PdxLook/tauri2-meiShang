@@ -9,7 +9,7 @@
         <div class="text-8 leading-12 font-sans-500">选择所需VIP版本，开始运营公众号</div>
         <div class="text-4 text-black-800 mt-8">
           <ul class="flex-center space-x-8">
-            <li><span class="mr-1 iconfont icon-dui1-2"></span>AICG内容创作</li>
+            <li><span class="mr-1 iconfont icon-dui1-2"></span>AIGC内容创作</li>
             <li><span class="mr-1 iconfont icon-dui1-2"></span>多账号统一管理</li>
             <li><span class="mr-1 iconfont icon-dui1-2"></span>海量文章模板</li>
             <li><span class="mr-1 iconfont icon-dui1-2"></span>专属顾问服务支持</li>
@@ -19,7 +19,7 @@
       <!-- 会员版本 -->
       <div class="grid lg:grid-cols-3 gap-13 lg:gap-6 mt-20 vip-version lg:px-4">
         <div class="flex-1 bg-white rounded shadow-lg vip-version-item relative"
-          v-for="items, i in resData?.vip_version" :key="items">
+          v-for="items, i in vipData?.vip_version" :key="items">
           <div class="icon-vip-res absolute text-3.5 text-white flex-center pt-[2px] -top-10 -left-2"
             v-if="items?.icon_string">
             {{ items?.icon_string }}
@@ -83,17 +83,15 @@
           </div>
         </div>
       </div>
-
       <!-- 开通vip弹窗 -->
       <MxVipModal ref="vipModalRef" />
     </div>
-
     <!-- VIP常见问题 -->
     <div class="lg:px-4">
       <div class="text-8 leading-12 font-sans-500 text-center">VIP常见问题</div>
       <div class="bg-white rounded shadow-lg p-8 mt-10">
         <el-collapse v-model="activeAsk">
-          <el-collapse-item :name="index" v-for="items, index in resData?.faq_list " :key="index">
+          <el-collapse-item :name="index" v-for="items, index in vipData?.faq_list " :key="index">
             <template #title>
               <div class="text-4 leading-6 ">
                 Q:{{ items?.title }}
@@ -106,7 +104,6 @@
         </el-collapse>
       </div>
     </div>
-
   </main>
 </template>
 
@@ -120,62 +117,74 @@ const userStore = useUserStore();
 const route = useRoute()
 const vipModalRef = ref(null)
 const activeAsk = ref([0])
-const resData = ref({
+const vipData = ref({
   faq_list: [],
   vip_version: [],
 })
 
 /**
  * 切换套餐
- * @param vipId 版本id
- * @param setMealId 套餐id
- * @param benefits 权益
+ * @param vipId number 版本id
+ * @param setMealId number 套餐id
+ * @param benefits object 权益
  */
 function activeSku(vipId, setMealId, benefits) {
-  resData.value.vip_version.forEach(version => {
-    if (version.version_id === vipId) {
-      Object.assign(version, { rights: benefits, setMealId });
-      version.vip_list.forEach(setMeal => {
-        setMeal.is_select = setMeal.id === setMealId ? 1 : 0;
-      });
-    }
-  });
-}
-
-const getData = async () => {
-  const getRes = await pullVip();
-  if (!getRes?.status) return;
-
-  resData.value = getRes?.data;
-
-  if (Array.isArray(resData.value.vip_version)) {
-    resData.value.vip_version.forEach(version => {
-      const selectedSetMeal = version.vip_list.find(setMeal => setMeal.is_select === 1);
-      if (selectedSetMeal) {
-        Object.assign(version, {
-          rights: selectedSetMeal.benefits,
-          setMealId: selectedSetMeal.id
+  if (Array.isArray(vipData.value.vip_version)) {
+    vipData.value.vip_version.forEach(version => {
+      if (version.version_id === vipId) {
+        Object.assign(version, { rights: benefits, setMealId });
+        version.vip_list.forEach(setMeal => {
+          setMeal.is_select = setMeal.id === setMealId ? 1 : 0;
         });
       }
     });
+  }
+}
+
+const fetchVipData = async () => {
+  try {
+    const getRes = await pullVip();
+    if (!getRes?.status) return;
+
+    vipData.value = getRes?.data;
+    if (Array.isArray(vipData.value.vip_version)) {
+      vipData.value.vip_version.forEach(version => {
+        const selectedSetMeal = version.vip_list.find(setMeal => setMeal.is_select === 1);
+        if (selectedSetMeal) {
+          Object.assign(version, {
+            rights: selectedSetMeal.benefits,
+            setMealId: selectedSetMeal.id
+          });
+        }
+      });
+    }
+  } catch (error) {
+    ElMessage.error(`获取VIP数据失败`);
   }
 };
 
 /**
  * 会员版本弹窗
- * @param item 
+ * @param id number||string 版本id 
  */
 const openVipModal = async (id) => {
-  const getRes = await pullVip({ act: 'detail', id: id })
-  if (!getRes?.status) return
-  if (vipModalRef.value) {
-    vipModalRef.value?.openModal(getRes?.data)
+  try {
+    const getRes = await pullVip({ act: 'detail', id: id });
+    if (!getRes?.status) {
+      throw new Error(getRes.msg);
+    }
+
+    if (vipModalRef.value) {
+      vipModalRef.value?.openModal(getRes?.data);
+    }
+  } catch (error) {
+    ElMessage.error(`获取会员版本详情失败`);
   }
 }
 
 watch(() => userStore.isLoggedIn, (newIsLoggedIn) => {
   if (newIsLoggedIn) return
-  getData();
+  fetchVipData();
 });
 
 onMounted(() => {
@@ -183,10 +192,10 @@ onMounted(() => {
   if (!isEmpty(route.query?.id) && isNumber(route.query?.id)) {
     openVipModal(route.query?.id)
   }
-  getData();
+  fetchVipData();
 });
 </script>
 
 <style lang="scss" scoped>
-@use './index' as *;
+@use './style' as *;
 </style>
