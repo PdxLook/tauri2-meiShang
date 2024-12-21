@@ -45,7 +45,7 @@
     "core:webview:allow-create-webview-window",
     "updater:default"
   ],
-  "platforms": ["windows", "linux", "macOS", "android", "iOS"],
+  "platforms": ["windows"],
   "local": true,
 
   "webviews": []
