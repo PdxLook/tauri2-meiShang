@@ -8,7 +8,7 @@ import { relaunch } from '@tauri-apps/plugin-process';
 
 try {
   const update = await check();
-
+  console.log(update);
   if (update) {
     console.log(
       `发现更新 ${update.version} from ${update.date} with notes ${update.body}`
